@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Realistic Ball Bounce</title>
+</head>
+<body>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            height: 100vh;
+        }
+
+        .bg {
+            position: relative;
+            height: 400px;
+            width: 96%;
+            background-color: rgb(20, 196, 58);
+            border: 3px solid black;
+            overflow: hidden;
+        }
+
+        .ball {
+            position: absolute;
+            top: 10px;
+            left: 10px;
+            height: 50px;
+            width: 50px;
+            background-color: red;
+            border-radius: 50%;
+            border: 2px solid black;
+        }
+
+        .play-btn {
+            margin-top: 20px;
+            padding: 10px 20px;
+            background-color: #007bff;
+            color: white;
+            border: none;
+            cursor: pointer;
+            font-size: 16px;
+            border-radius: 5px;
+        }
+
+        .play-btn:hover {
+            background-color: #0056b3;
+        }
+    </style>
+
+    <div class="bg">
+        <div class="ball"></div>
+    </div>
+
+    <button class="play-btn">Play</button>
+
+    <script>
+        const ball = document.querySelector('.ball');
+        const playButton = document.querySelector('.play-btn');
+
+        let ballY = 10; // Initial position of the ball (top)
+        let velocityY = 0; // Initial vertical velocity
+        const gravity =.98; // Simulating gravity
+        const bounceFactor = 0.7; // How much energy is retained after a bounce
+        const ballSize = 50; // Ball diameter
+        let isAnimating = false;
+
+        // Function to update the ball's position
+        function updateBallPosition() {
+            // Apply gravity to the vertical velocity
+            velocityY += gravity;
+
+            // Update the ball's position based on the velocity
+            ballY += velocityY;
+
+            // Check if the ball hits the bottom of the container
+            if (ballY + ballSize > 400) {
+                ballY = 400 - ballSize; // Position the ball at the bottom
+                velocityY = -velocityY * bounceFactor; // Reverse velocity and apply bounce factor
+            }
+
+            // Apply the updated position to the ball
+            ball.style.top = `${ballY}px`;
+
+            // Continue the animation loop
+            if (isAnimating) {
+                requestAnimationFrame(updateBallPosition);
+            }
+        }
+
+        // Start the animation when the play button is pressed
+        playButton.addEventListener('click', () => {
+            if (!isAnimating) {
+                isAnimating = true;
+                velocityY = 0; // Reset velocity
+                requestAnimationFrame(updateBallPosition); // Start animation
+            }
+        });
+    </script>
+</body>
+</html>
